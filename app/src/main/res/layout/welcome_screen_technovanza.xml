@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:text="@string/technovanza_2k17"
+        android:textAllCaps="true"
+        android:textSize="25sp"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:id="@+id/name_event"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+<TextView
+    android:text="@string/welcome_technovanza"
+    android:textAllCaps="true"
+    android:textSize="25sp"
+    android:layout_centerVertical="true"
+    android:layout_below="@id/name_event"
+    android:layout_marginTop="20dp"
+    android:layout_gravity="center"
+    android:textStyle="bold"
+    android:textAlignment="center"
+    android:id="@+id/welcome_screen"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+    <Button
+        android:layout_below="@id/welcome_screen"
+        android:text="Next"
+        android:textSize="25sp"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/next_from_Welcome"
+        style="?buttonBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

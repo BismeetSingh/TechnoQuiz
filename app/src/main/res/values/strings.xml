@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">TechnoQuiz</string>
+    <string name="first_member_name">First Member Name</string>
+    <string name="second_member_name">Second Member Name</string>
+    <string name="team_name">Team Name</string>
+    <string name="register">Register</string>
+    <string name="welcome_technovanza">WElcome To technovanza</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone Number</string>
+    <string name="technovanza_2k17">Technovanza 2k17</string>
+    <string name="next">Next</string>
+    <string name="college_name">College Name</string>
+    <string name="save">Save</string>
+    <string name="emailerror">Please enter a valid email</string>
+    <string name="phoneerror">Please enter a valid phone number</string>
+    <string name="nameerror">Please enter a valid name</string>
+    <string-array name="house">
+        <item>If From Vjti,Select</item>
+        <item>Blue Dragons</item>
+        <item>Red Phoenix</item>
+        <item>Green Griffins</item>
+        <item>None</item>
+    </string-array>
+</resources>

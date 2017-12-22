@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp"
+    app:cardCornerRadius="3dp"
+    app:elevation="6dp">
+
+    <RelativeLayout
+        android:id="@+id/rlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+<Chronometer
+    android:layout_width="wrap_content"
+    android:id="@+id/timer"
+    android:layout_centerHorizontal="true"
+    android:textSize="20sp"
+    android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/questext"
+            android:layout_below="@id/timer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="This is a sample question" />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_below="@id/questext"
+            android:id="@+id/quesimage"
+            android:layout_centerHorizontal="true"
+            tools:src="@mipmap/ic_launcher" />
+        <RadioGroup
+            android:id="@+id/optionsgroup"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/quesimage"
+            android:layout_height="wrap_content">
+           <RadioButton
+               android:checked="false"
+               android:id="@+id/optionone"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content" />
+            <RadioButton
+                android:checked="false"
+                android:id="@+id/optiontwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <RadioButton
+                android:checked="false"
+                android:id="@+id/optionthree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <RadioButton
+                android:checked="false"
+                android:id="@+id/optionfour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RadioGroup>
+<Button
+    android:layout_width="wrap_content"
+    android:layout_below="@id/optionsgroup"
+    android:layout_centerHorizontal="true"
+    android:text="@string/next"
+    style="?android:buttonBarButtonStyle"
+    android:id="@+id/nextquestion"
+    android:textSize="20sp"
+    android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+</LinearLayout>

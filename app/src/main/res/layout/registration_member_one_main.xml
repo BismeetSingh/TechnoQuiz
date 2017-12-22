@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context="com.example.bismeet.technoquiz.MainActivity">
+
+    <EditText
+        android:inputType="text"
+        android:layout_marginTop="10dp"
+        android:id="@+id/first_member_name"
+        android:hint="@string/first_member_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:inputType="textEmailAddress"
+        android:layout_marginTop="10dp"
+        android:id="@+id/Email_first"
+        android:hint="@string/email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:inputType="phone"
+        android:layout_marginTop="10dp"
+        android:id="@+id/phone_first"
+        android:hint="@string/phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        style="?android:buttonBarButtonStyle"
+        android:text="@string/next"
+        android:textSize="25sp"
+        android:id="@+id/member_two_button"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
