@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -39,7 +40,8 @@ import java.util.Random;
 
 public class Question extends AppCompatActivity {
     private ImageView quesimage;
-    private Chronometer timer;
+//    private Chronometer timer;
+    private TextView timer;
     private RadioGroup optionsgroup;
     private int quesid;
     private RadioButton one, two, three, four;
@@ -72,24 +74,8 @@ public class Question extends AppCompatActivity {
 
             }
         });
-        timer.setBase(SystemClock.elapsedRealtime());
-        timer.start();
-        timer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
-            @Override
-            public void onChronometerTick(Chronometer chronometer) {
-                Log.d("timer", "" + chronometer.getText());
-                Log.d("time", "" + time);
-                if (time > 0) {
-                    if (timer.getText().toString().equalsIgnoreCase("00:" + String.valueOf(time))) {
-                        timer.stop();
-                        submitoptionSelected();
-                        rand();
+       reverseTimer(time,timer);
 
-                    }
-                }
-
-            }
-        });
 
 //
 
@@ -112,12 +98,13 @@ public class Question extends AppCompatActivity {
         final StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SUBMIT_OPTIONS_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if (response.equalsIgnoreCase("Success")) {
+                if (response.equalsIgnoreCase("Success") || response.equalsIgnoreCase("Updated succesfully")) {
                     optionsgroup.clearCheck();
 //                    if(!flag)
 //                    {
                     while (!flag) {
                         flag = true;
+                        Log.d("randcall","I am being called from options");
                         rand();
                     }
 //                        rand();
@@ -198,33 +185,31 @@ public class Question extends AppCompatActivity {
         int randnum;
         int count = 0;
         count++;
-        Log.d("callcount", "" + count + " " + " " + quesid);
+        Log.d("callcount", "" + count + " " + " " + quesid+" "+array.length());
 
 
         if (array.length() == 0) {
+
             rand();
         } else {
             randnum = new Random().nextInt(array.length());
             JSONObject quesobj = array.getJSONObject(randnum);
             Log.d("old", "" + quesid);
             Log.d("old1", "" + quesobj.getInt("QuesId"));
-            if (quesid == quesobj.getInt("QuesId")) {
-                rand();
-            } else {
-                quesid = quesobj.getInt("QuesId");
-                String ques = quesobj.getString("Question");
-                String purl = quesobj.getString("PhotoURL");
-                time = quesobj.getInt("Time");
-                Log.d("time", "" + time);
-                questionTextView.setText(ques);
-                quesimage.setImageResource(getResources().getIdentifier("drawable/" + purl, null, getPackageName()));
-                getOptions();
-            }
 
+            quesid = quesobj.getInt("QuesId");
+            Log.d("quesid",""+quesid);
+            String ques = quesobj.getString("Question");
+            String purl = quesobj.getString("PhotoURL");
+            time = quesobj.getInt("Time");
+//            Log.d("time", "" + time);
+            questionTextView.setText(ques);
+            quesimage.setImageResource(getResources().getIdentifier("drawable/" + purl, null, getPackageName()));
+            getOptions();
         }
 
-
     }
+
 
     private void getOptions() {
         final ProgressDialog progressDialog = ProgressDialog.show(Question.this, "Loading", "Please wait");
@@ -233,7 +218,7 @@ public class Question extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 progressDialog.dismiss();
-                Log.d("optionsresponse", response);
+
                 try {
                     parseOptions(response);
                 } catch (JSONException e) {
@@ -271,8 +256,8 @@ public class Question extends AppCompatActivity {
         three.setText(option3.getString("question"));
         four.setText(option4.getString("question"));
         count++;
-        timer.setBase(SystemClock.elapsedRealtime());
-        timer.start();
+        Log.d("fetch",""+time);
+        reverseTimer(time,timer);
 
     }
 
@@ -280,12 +265,13 @@ public class Question extends AppCompatActivity {
     public void rand() {
         Log.d("count", "" + count);
 
+
         final Random rand = new Random();
         if (count == 12) {
 
 //            Log.d("done","Questions done");
             startActivity(new Intent(Question.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                return;
+            return;
 
         }
 //        timer.setBase(SystemClock.elapsedRealtime());
@@ -311,78 +297,97 @@ public class Question extends AppCompatActivity {
         switch (qtype) {
             case 0:
                 switch (qlevel) {
-                    case 0:
+                    case 0: {
                         if (arr[0][2] > 0) {
                             sendtype = type[qtype];
                             sendlvl = level[qlevel];
                             arr[0][2]--;
                             getImage(getSharedPreferences(Config.Shared_ID_PREF, MODE_PRIVATE).getInt(Config.KEY_ID, 0), sendtype, sendlvl);
+                            break;
                         } else {
                             flag = false;
                             return;
                         }
-                        break;
-                    case 1:
+
+                    }
+
+                    case 1: {
                         if (arr[1][2] > 0) {
                             sendtype = type[qtype];
                             sendlvl = level[qlevel];
                             arr[1][2]--;
                             getImage(getSharedPreferences(Config.Shared_ID_PREF, MODE_PRIVATE).getInt(Config.KEY_ID, 0), sendtype, sendlvl);
+                            break;
                         } else {
                             flag = false;
                             return;
                         }
-                        break;
+
+                    }
+
                     case 2:
+
+                    {
                         if (arr[2][2] > 0) {
                             sendtype = type[qtype];
                             sendlvl = level[qlevel];
                             arr[2][2]--;
                             getImage(getSharedPreferences(Config.Shared_ID_PREF, MODE_PRIVATE).getInt(Config.KEY_ID, 0), sendtype, sendlvl);
+                            break;
                         } else {
                             flag = false;
                             return;
                         }
-                        break;
 
+                    }
                 }
                 break;
             case 1:
                 switch (qlevel) {
-                    case 0:
+                    case 0: {
                         if (arr[3][2] > 0) {
                             sendtype = type[qtype];
                             sendlvl = level[qlevel];
                             arr[3][2]--;
                             getImage(getSharedPreferences(Config.Shared_ID_PREF, MODE_PRIVATE).getInt(Config.KEY_ID, 0), sendtype, sendlvl);
-
+                            break;
                         } else {
                             flag = false;
                             return;
                         }
-                        break;
+
+                    }
+
                     case 1:
+
+                    {
                         if (arr[4][2] > 0) {
                             sendtype = type[qtype];
                             sendlvl = level[qlevel];
                             arr[4][2]--;
                             getImage(getSharedPreferences(Config.Shared_ID_PREF, MODE_PRIVATE).getInt(Config.KEY_ID, 0), sendtype, sendlvl);
+                            break;
                         } else {
                             flag = false;
                             return;
                         }
-                        break;
+
+                    }
                     case 2:
+
+                    {
                         if (arr[5][2] > 0) {
                             sendtype = type[qtype];
                             sendlvl = level[qlevel];
                             arr[5][2]--;
                             getImage(getSharedPreferences(Config.Shared_ID_PREF, MODE_PRIVATE).getInt(Config.KEY_ID, 0), sendtype, sendlvl);
+                            break;
                         } else {
                             flag = false;
                             return;
                         }
-                        break;
+
+                    }
 
                 }
                 break;
@@ -394,33 +399,36 @@ public class Question extends AppCompatActivity {
                             sendlvl = level[qlevel];
                             arr[6][2]--;
                             getImage(getSharedPreferences(Config.Shared_ID_PREF, MODE_PRIVATE).getInt(Config.KEY_ID, 0), sendtype, sendlvl);
+                            break;
                         } else {
                             flag = false;
                             return;
                         }
-                        break;
+
                     case 1:
                         if (arr[7][2] > 0) {
                             sendtype = type[qtype];
                             sendlvl = level[qlevel];
                             arr[7][2]--;
                             getImage(getSharedPreferences(Config.Shared_ID_PREF, MODE_PRIVATE).getInt(Config.KEY_ID, 0), sendtype, sendlvl);
+                            break;
                         } else {
                             flag = false;
                             return;
                         }
-                        break;
+
                     case 2:
                         if (arr[8][2] > 0) {
                             sendtype = type[qtype];
                             sendlvl = level[qlevel];
                             arr[8][2]--;
                             getImage(getSharedPreferences(Config.Shared_ID_PREF, MODE_PRIVATE).getInt(Config.KEY_ID, 0), sendtype, sendlvl);
+                            break;
                         } else {
                             flag = false;
                             return;
                         }
-                        break;
+
 
                 }
                 break;
@@ -432,41 +440,45 @@ public class Question extends AppCompatActivity {
                             sendlvl = level[qlevel];
                             arr[9][2]--;
                             getImage(getSharedPreferences(Config.Shared_ID_PREF, MODE_PRIVATE).getInt(Config.KEY_ID, 0), sendtype, sendlvl);
+                            break;
                         } else {
                             flag = false;
                             return;
                         }
-                        break;
+
                     case 1:
                         if (arr[10][2] > 0) {
                             sendtype = type[qtype];
                             sendlvl = level[qlevel];
                             arr[10][2]--;
                             getImage(getSharedPreferences(Config.Shared_ID_PREF, MODE_PRIVATE).getInt(Config.KEY_ID, 0), sendtype, sendlvl);
+                            break;
                         } else {
                             flag = false;
                             return;
                         }
-                        break;
+
                     case 2:
                         if (arr[11][2] > 0) {
                             sendtype = type[qtype];
                             sendlvl = level[qlevel];
                             arr[11][2]--;
                             getImage(getSharedPreferences(Config.Shared_ID_PREF, MODE_PRIVATE).getInt(Config.KEY_ID, 0), sendtype, sendlvl);
+                            break;
                         } else {
                             flag = false;
                             return;
                         }
-                        break;
+
 
                 }
                 break;
 
+
         }
 
 
-        Log.d("num", "" + quesid);
+
 
     }
 
@@ -494,5 +506,23 @@ public class Question extends AppCompatActivity {
         final AlertDialog dialog = builder.create();
         dialog.show();
 
+    }
+    public void reverseTimer(int Seconds,final TextView tv){
+
+        new CountDownTimer(Seconds* 1000+1000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                int seconds = (int) (millisUntilFinished / 1000);
+                int minutes = seconds / 60;
+                seconds = seconds % 60;
+                tv.setText("TIME : " + String.format("%02d", minutes)
+                        + ":" + String.format("%02d", seconds));
+            }
+
+            public void onFinish() {
+                submitoptionSelected();
+                rand();
+            }
+        }.start();
     }
 }
