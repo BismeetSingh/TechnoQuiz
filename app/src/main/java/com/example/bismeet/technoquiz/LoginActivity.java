@@ -1,11 +1,13 @@
 package com.example.bismeet.technoquiz;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 import com.android.volley.AuthFailureError;
@@ -15,6 +17,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -39,21 +42,33 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void senddetails() {
-        StringRequest stringRequest=new StringRequest(Request.Method.POST, "", new Response.Listener<String>() {
+        StringRequest stringRequest=new StringRequest(Request.Method.POST, Config.LOGIN_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                if(response.equalsIgnoreCase("Login Successful"))
+                {
+                    startActivity(new Intent(LoginActivity.this,Question.class));
+
+                }
+                else
+                {
+                    Toast.makeText(LoginActivity.this, response, Toast.LENGTH_SHORT).show();
+                }
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
         })
         {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                return super.getParams();
+                Map<String,String> login=new HashMap<>();
+                login.put(Config.KEY_ID,teamid.getText().toString());
+                return login;
             }
         };
         Volley.newRequestQueue(getApplicationContext()).add(stringRequest);
