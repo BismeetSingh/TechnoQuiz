@@ -14,6 +14,7 @@
     <string name="emailerror">Please enter a valid email</string>
     <string name="phoneerror">Please enter a valid phone number</string>
     <string name="nameerror">Please enter a valid name</string>
+    <string name="teamid">Team Id</string>
     <string-array name="house">
         <item>If From Vjti,Select</item>
         <item>Blue Dragons</item>

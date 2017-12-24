@@ -32,6 +32,15 @@ public class Team_Info extends AppCompatActivity{
     private Spinner house_vjti;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if(getSharedPreferences(Config.Shared_ID_PREF,MODE_PRIVATE).getInt(Config.KEY_ID,0)!=0)
+        {
+            startActivity(new Intent(Team_Info.this,LoginActivity.class));
+        }
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.team_main);

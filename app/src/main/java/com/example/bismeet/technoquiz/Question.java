@@ -50,7 +50,6 @@ public class Question extends AppCompatActivity {
     private int time;
     int arr[][] = {{0, 0, 1}, {0, 1, 1}, {0, 2, 1}, {1, 0, 1}, {1, 1, 1}, {1, 2, 1}, {2, 0, 1}, {2, 1, 1}, {2, 2, 1}, {3, 0, 1}, {3, 1, 1}, {3, 2, 1}};
 
-    //TODO question recurrence fix.//High priority.
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -273,7 +272,7 @@ public class Question extends AppCompatActivity {
         if (count == 12) {
 
 //            Log.d("done","Questions done");
-            startActivity(new Intent(Question.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            startActivity(new Intent(Question.this, ScoreActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             return;
 
         }

@@ -3,22 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center"
     android:layout_height="match_parent"
     tools:context="com.example.bismeet.technoquiz.MainActivity">
 
     <EditText
         android:inputType="text"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:id="@+id/team_name"
         android:hint="@string/team_name"
         android:gravity="center"
-        android:layout_centerVertical="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <EditText
         android:inputType="text"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:layout_below="@id/team_name"
         android:id="@+id/college_name"
         android:hint="@string/college_name"
