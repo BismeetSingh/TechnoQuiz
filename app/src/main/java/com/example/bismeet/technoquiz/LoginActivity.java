@@ -1,5 +1,6 @@
 package com.example.bismeet.technoquiz;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -42,9 +43,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void senddetails() {
+        final ProgressDialog progressDialog=ProgressDialog.show(LoginActivity.this,"Please wait","Loading");
+        progressDialog.show();
         StringRequest stringRequest=new StringRequest(Request.Method.POST, Config.LOGIN_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                progressDialog.dismiss();
                 if(response.equalsIgnoreCase("Login Successful"))
                 {
                     startActivity(new Intent(LoginActivity.this,Question.class));
@@ -59,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
                 Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
