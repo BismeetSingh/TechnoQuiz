@@ -6,13 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -40,13 +38,14 @@ import java.util.Random;
 
 public class Question extends AppCompatActivity {
     private ImageView quesimage;
-//    private Chronometer timer;
+
     private TextView timer;
     private RadioGroup optionsgroup;
     private int quesid;
     private RadioButton one, two, three, four;
     private TextView questionTextView;
     private boolean flag = true;
+    private CountDownTimer countDownTimer;
     private int count = 0;
     private int time;
     int arr[][] = {{0, 0, 1}, {0, 1, 1}, {0, 2, 1}, {1, 0, 1}, {1, 1, 1}, {1, 2, 1}, {2, 0, 1}, {2, 1, 1}, {2, 2, 1}, {3, 0, 1}, {3, 1, 1}, {3, 2, 1}};
@@ -69,12 +68,14 @@ public class Question extends AppCompatActivity {
         nextquestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                countDownTimer.cancel();
                 submitoptionSelected();
+                rand();
 
 
             }
         });
-       reverseTimer(time,timer);
+        Log.d("times", "" + time);
 
 
 //
@@ -100,19 +101,14 @@ public class Question extends AppCompatActivity {
             public void onResponse(String response) {
                 if (response.equalsIgnoreCase("Success") || response.equalsIgnoreCase("Updated succesfully")) {
                     optionsgroup.clearCheck();
+
 //                    if(!flag)
 //                    {
                     while (!flag) {
                         flag = true;
-                        Log.d("randcall","I am being called from options");
+                        Log.d("randcall", "I am being called from options");
                         rand();
                     }
-//                        rand();
-//                    }
-//                    else {
-//                        rand();
-//                    }
-
 //                    rand();
                 }
 
@@ -185,7 +181,7 @@ public class Question extends AppCompatActivity {
         int randnum;
         int count = 0;
         count++;
-        Log.d("callcount", "" + count + " " + " " + quesid+" "+array.length());
+        Log.d("callcount", "" + count + " " + " " + quesid + " " + array.length());
 
 
         if (array.length() == 0) {
@@ -198,7 +194,7 @@ public class Question extends AppCompatActivity {
             Log.d("old1", "" + quesobj.getInt("QuesId"));
 
             quesid = quesobj.getInt("QuesId");
-            Log.d("quesid",""+quesid);
+            Log.d("quesid", "" + quesid);
             String ques = quesobj.getString("Question");
             String purl = quesobj.getString("PhotoURL");
             time = quesobj.getInt("Time");
@@ -214,6 +210,7 @@ public class Question extends AppCompatActivity {
     private void getOptions() {
         final ProgressDialog progressDialog = ProgressDialog.show(Question.this, "Loading", "Please wait");
         progressDialog.show();
+        final Request.Priority priority = Request.Priority.HIGH;
         final StringRequest optionsRequest = new StringRequest(Request.Method.POST, Config.OPTIONS_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -240,6 +237,12 @@ public class Question extends AppCompatActivity {
                 optionsmap.put(Config.KEY_ID, String.valueOf(quesid));
                 return optionsmap;
             }
+
+            @Override
+            public Priority getPriority() {
+                return priority;
+            }
+
         };
         Volley.newRequestQueue(getApplicationContext()).add(optionsRequest);
     }
@@ -256,8 +259,8 @@ public class Question extends AppCompatActivity {
         three.setText(option3.getString("question"));
         four.setText(option4.getString("question"));
         count++;
-        Log.d("fetch",""+time);
-        reverseTimer(time,timer);
+        Log.d("fetch", "" + time);
+        reverseTimer(time, timer);
 
     }
 
@@ -274,17 +277,7 @@ public class Question extends AppCompatActivity {
             return;
 
         }
-//        timer.setBase(SystemClock.elapsedRealtime());
-
-//        quesid = rand.nextInt(30) + 1;
-//        if(questionaskedlist.contains(quesid))
-//        {
-//            rand();
-//        }
-//        else {
-//            questionaskedlist.add(quesid
-//            getImage(quesid);
-//        }
+//
 
         final int qtype = rand.nextInt(4);
         final int qlevel = rand.nextInt(3);
@@ -478,8 +471,6 @@ public class Question extends AppCompatActivity {
         }
 
 
-
-
     }
 
     @Override
@@ -507,10 +498,12 @@ public class Question extends AppCompatActivity {
         dialog.show();
 
     }
-    public void reverseTimer(int Seconds,final TextView tv){
 
-        new CountDownTimer(Seconds* 1000+1000, 1000) {
+    public void reverseTimer(int Seconds, final TextView tv) {
 
+        Log.d("rand1", "timer called");
+
+        countDownTimer = new CountDownTimer(Seconds * 1000 + 1000, 1000) {
             public void onTick(long millisUntilFinished) {
                 int seconds = (int) (millisUntilFinished / 1000);
                 int minutes = seconds / 60;
@@ -522,7 +515,10 @@ public class Question extends AppCompatActivity {
             public void onFinish() {
                 submitoptionSelected();
                 rand();
+
             }
         }.start();
+
+
     }
 }
