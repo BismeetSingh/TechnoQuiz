@@ -2,6 +2,7 @@ package com.example.bismeet.technoquiz;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -51,7 +52,11 @@ public class LoginActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 if(response.equalsIgnoreCase("Login Successful"))
                 {
+                    final SharedPreferences sharedPreferences=getSharedPreferences(Config.Shared_ID_PREF,MODE_PRIVATE);
+                    final SharedPreferences.Editor editor=sharedPreferences.edit().putInt(Config.KEY_ID, Integer.parseInt(teamid.getText().toString()));
+                    editor.commit();
                     startActivity(new Intent(LoginActivity.this,Question.class));
+//
 
                 }
                 else

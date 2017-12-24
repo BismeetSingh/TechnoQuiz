@@ -38,7 +38,6 @@ import java.util.Random;
 
 public class Question extends AppCompatActivity {
     private ImageView quesimage;
-
     private TextView timer;
     private RadioGroup optionsgroup;
     private int quesid;
@@ -48,6 +47,7 @@ public class Question extends AppCompatActivity {
     private CountDownTimer countDownTimer;
     private int count = 0;
     private int time;
+    private int questioncount = 12;
     int arr[][] = {{0, 0, 1}, {0, 1, 1}, {0, 2, 1}, {1, 0, 1}, {1, 1, 1}, {1, 2, 1}, {2, 0, 1}, {2, 1, 1}, {2, 2, 1}, {3, 0, 1}, {3, 1, 1}, {3, 2, 1}};
 
     @Override
@@ -265,11 +265,10 @@ public class Question extends AppCompatActivity {
 
 
     public void rand() {
-        Log.d("count", "" + count);
 
 
         final Random rand = new Random();
-        if (count == 12) {
+        if (count == questioncount) {
 
 //            Log.d("done","Questions done");
             startActivity(new Intent(Question.this, ScoreActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));

@@ -77,20 +77,28 @@ public class Team_Info extends AppCompatActivity{
         final StringRequest teamdbreq=new StringRequest(Request.Method.POST, Config.TEAM_COLLEGE_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                final  int id=Integer.parseInt(response);
-                if(id>0)
+                if(response.equalsIgnoreCase("Insertion Failed"))
                 {
-
-
-                    final SharedPreferences sharedPreferences=getSharedPreferences(Config.Shared_ID_PREF,MODE_PRIVATE);
-                    final SharedPreferences.Editor editor=sharedPreferences.edit().putInt(Config.KEY_ID,id);
-                   editor.commit();
-
-                 startActivity(new Intent(Team_Info.this,Registration_One_Member.class).putExtra("id",id));
+                    Toast.makeText(Team_Info.this, "Team Already Exists", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(Team_Info.this,LoginActivity.class));
                 }
                 else {
-                    Toast.makeText(Team_Info.this,"Error",Toast.LENGTH_SHORT).show();
+                    final  int id=Integer.parseInt(response);
+                    if(id>0)
+                    {
+
+
+                        final SharedPreferences sharedPreferences=getSharedPreferences(Config.Shared_ID_PREF,MODE_PRIVATE);
+                        final SharedPreferences.Editor editor=sharedPreferences.edit().putInt(Config.KEY_ID,id);
+                        editor.commit();
+
+                        startActivity(new Intent(Team_Info.this,Registration_One_Member.class).putExtra("id",id));
+                    }
+                    else {
+                        Toast.makeText(Team_Info.this,"Error",Toast.LENGTH_SHORT).show();
+                    }
                 }
+
 
 
 
