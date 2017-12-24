@@ -9,6 +9,7 @@ class Config {
     static final String MEMBER_URL = "http://192.168.0.7/team_quiz/member_upload.php";
     static final String IMAGE_QUESTIONS_URL = "http://192.168.0.7/team_quiz/get_questions.php";
     static final String OPTIONS_URL = "http://192.168.0.7/team_quiz/options.php";
+    static final String SCORE_URL="http://192.168.0.7/team_quiz/score.php";
     static final String SUBMIT_OPTIONS_URL = "http://192.168.0.7/team_quiz/submit_user_selected_option.php";
     static final String LOGIN_URL="http://192.168.0.7/team_quiz/login.php";
     static final String KEY_TEAM = "team_name";
