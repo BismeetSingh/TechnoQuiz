@@ -75,7 +75,7 @@ public class Registration_Two_member extends AppCompatActivity {
                 if(response.equalsIgnoreCase("success"))
                 {
                     Toast.makeText(getApplicationContext(),"You are successfully registered",Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(Registration_Two_member.this,Question.class));
+                    startActivity(new Intent(Registration_Two_member.this,ConfirmationButton.class));
                 }
                 else {
                     Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();

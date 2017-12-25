@@ -15,6 +15,7 @@
     <string name="phoneerror">Please enter a valid phone number</string>
     <string name="nameerror">Please enter a valid name</string>
     <string name="teamid">Team Id</string>
+    <string name="start">START</string>
     <string-array name="house">
         <item>If From Vjti,Select</item>
         <item>Blue Dragons</item>

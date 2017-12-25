@@ -27,6 +27,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -38,6 +42,7 @@ import java.util.Random;
 
 public class Question extends AppCompatActivity {
     private ImageView quesimage;
+    private Date timeone,timetwo;
     private TextView timer;
     private RadioGroup optionsgroup;
     private int quesid;
@@ -47,8 +52,9 @@ public class Question extends AppCompatActivity {
     private CountDownTimer countDownTimer;
     private int count = 0;
     private int time;
-    private int questioncount = 12;
-    int arr[][] = {{0, 0, 1}, {0, 1, 1}, {0, 2, 1}, {1, 0, 1}, {1, 1, 1}, {1, 2, 1}, {2, 0, 1}, {2, 1, 1}, {2, 2, 1}, {3, 0, 1}, {3, 1, 1}, {3, 2, 1}};
+    private int questioncount = 20;
+    private int optionidone,optionidtwo,optionidthree,optionidfour;
+    int arr[][] = {{0, 0, 2}, {0, 1, 3}, {0, 2, 3}, {1, 0, 2}, {1, 1, 3}, {1, 2, 3}, {2, 0, 1}, {2, 1, 1}, {2, 2, 2}};//, {2, 0, 1}, {2, 1, 1}, {2, 2, 2}, {3, 0, 1}, {3, 1, 1}, {3, 2, 1}
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,6 +81,28 @@ public class Question extends AppCompatActivity {
             }
         });
         Log.d("times", "" + time);
+//        String string1 = "22:00:00";
+//        Date time1 = null;
+//        try {
+//            time1 = new SimpleDateFormat("HH:mm:ss").parse(string1);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        Calendar calendar1 = Calendar.getInstance();
+//        calendar1.setTime(time1);
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+        String formattedtime = df.format(c.getTime());
+        try {
+             timeone=df.parse(formattedtime);
+        } catch (ParseException e) {
+            Log.d("error",e.getMessage());
+        }
+        Log.d("time",formattedtime);
+        String[] time=formattedtime.split(":");
+        Log.d("timetest",time[0]+" "+time[1]);
+//        int hour=calendar1.get(Calendar.HOUR_OF_DAY);
 
 
 //
@@ -86,13 +114,13 @@ public class Question extends AppCompatActivity {
         final int teamid = getSharedPreferences(Config.Shared_ID_PREF, MODE_PRIVATE).getInt(Config.KEY_ID, 0);
         Log.d("teamid", "" + teamid);
         if (one.isChecked()) {
-            optid = 1;
+            optid = optionidone;
         } else if (two.isChecked()) {
-            optid = 2;
+            optid = optionidtwo;
         } else if (three.isChecked()) {
-            optid = 3;
+            optid = optionidthree;
         } else if (four.isChecked()) {
-            optid = 4;
+            optid = optionidfour;
         }
         final int finalOptid = optid;
         final StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SUBMIT_OPTIONS_URL, new Response.Listener<String>() {
@@ -166,6 +194,7 @@ public class Question extends AppCompatActivity {
                 map.put(Config.KEY_ID, String.valueOf(id));
                 map.put(Config.KEY_TYPE, sendtype);
                 map.put(Config.KEY_LEVEL, sendlvl);
+                Log.d("values",""+id+sendtype+sendlvl);
                 return map;
             }
         };
@@ -199,7 +228,15 @@ public class Question extends AppCompatActivity {
             time = quesobj.getInt("Time");
 //            Log.d("time", "" + time);
             questionTextView.setText(ques);
-            quesimage.setImageResource(getResources().getIdentifier("drawable/" + purl, null, getPackageName()));
+            if(!purl.equalsIgnoreCase(""))
+            {
+                quesimage.setVisibility(View.VISIBLE);
+                quesimage.setImageResource(getResources().getIdentifier("drawable/" + purl, null, getPackageName()));
+
+            }
+            else {
+                quesimage.setVisibility(View.GONE);
+            }
             getOptions();
         }
 
@@ -257,6 +294,10 @@ public class Question extends AppCompatActivity {
         two.setText(option2.getString("question"));
         three.setText(option3.getString("question"));
         four.setText(option4.getString("question"));
+        optionidone=option1.getInt("optionid");
+        optionidtwo=option2.getInt("optionid");
+        optionidthree=option3.getInt("optionid");
+        optionidfour=option4.getInt("optionid");
         count++;
         Log.d("fetch", "" + time);
         reverseTimer(time, timer);
@@ -271,17 +312,33 @@ public class Question extends AppCompatActivity {
         if (count == questioncount) {
 
 //            Log.d("done","Questions done");
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+            String formattedtime = df.format(c.getTime());
+            try {
+                timetwo=df.parse(formattedtime);
+            } catch (ParseException e) {
+                Log.d("error",e.getMessage());
+            }
+            Log.d("time",formattedtime);
+            String[] time=formattedtime.split(":");
+            long mills = timeone.getTime() - timetwo.getTime();
+            long hours = mills/(1000 * 60 * 60);
+            long mins = mills % (1000*60*60);
+
+            String diff = hours + ":" + mins;
+            Log.d("diff",""+diff);
             startActivity(new Intent(Question.this, ScoreActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             return;
 
         }
 //
 
-        final int qtype = rand.nextInt(4);
+        final int qtype = rand.nextInt(3);
         final int qlevel = rand.nextInt(3);
 //        int qlevel = 0;
 //        int qtype = 0;
-        final String[] type = {"Image", "SQL", "DS", "CS"};
+        final String[] type = {"LQ","CS","IB"};
         final String[] level = {"Easy", "Medium", "Hard"};
         String sendtype;
         String sendlvl;
@@ -423,47 +480,47 @@ public class Question extends AppCompatActivity {
 
                 }
                 break;
-            case 3:
-                switch (qlevel) {
-                    case 0:
-                        if (arr[9][2] > 0) {
-                            sendtype = type[qtype];
-                            sendlvl = level[qlevel];
-                            arr[9][2]--;
-                            getImage(getSharedPreferences(Config.Shared_ID_PREF, MODE_PRIVATE).getInt(Config.KEY_ID, 0), sendtype, sendlvl);
-                            break;
-                        } else {
-                            flag = false;
-                            return;
-                        }
-
-                    case 1:
-                        if (arr[10][2] > 0) {
-                            sendtype = type[qtype];
-                            sendlvl = level[qlevel];
-                            arr[10][2]--;
-                            getImage(getSharedPreferences(Config.Shared_ID_PREF, MODE_PRIVATE).getInt(Config.KEY_ID, 0), sendtype, sendlvl);
-                            break;
-                        } else {
-                            flag = false;
-                            return;
-                        }
-
-                    case 2:
-                        if (arr[11][2] > 0) {
-                            sendtype = type[qtype];
-                            sendlvl = level[qlevel];
-                            arr[11][2]--;
-                            getImage(getSharedPreferences(Config.Shared_ID_PREF, MODE_PRIVATE).getInt(Config.KEY_ID, 0), sendtype, sendlvl);
-                            break;
-                        } else {
-                            flag = false;
-                            return;
-                        }
-
-
-                }
-                break;
+//            case 3:
+//                switch (qlevel) {
+//                    case 0:
+//                        if (arr[9][2] > 0) {
+//                            sendtype = type[qtype];
+//                            sendlvl = level[qlevel];
+//                            arr[9][2]--;
+//                            getImage(getSharedPreferences(Config.Shared_ID_PREF, MODE_PRIVATE).getInt(Config.KEY_ID, 0), sendtype, sendlvl);
+//                            break;
+//                        } else {
+//                            flag = false;
+//                            return;
+//                        }
+//
+//                    case 1:
+//                        if (arr[10][2] > 0) {
+//                            sendtype = type[qtype];
+//                            sendlvl = level[qlevel];
+//                            arr[10][2]--;
+//                            getImage(getSharedPreferences(Config.Shared_ID_PREF, MODE_PRIVATE).getInt(Config.KEY_ID, 0), sendtype, sendlvl);
+//                            break;
+//                        } else {
+//                            flag = false;
+//                            return;
+//                        }
+//
+//                    case 2:
+//                        if (arr[11][2] > 0) {
+//                            sendtype = type[qtype];
+//                            sendlvl = level[qlevel];
+//                            arr[11][2]--;
+//                            getImage(getSharedPreferences(Config.Shared_ID_PREF, MODE_PRIVATE).getInt(Config.KEY_ID, 0), sendtype, sendlvl);
+//                            break;
+//                        } else {
+//                            flag = false;
+//                            return;
+//                        }
+//
+//
+//                }
+//                break;
 
 
         }

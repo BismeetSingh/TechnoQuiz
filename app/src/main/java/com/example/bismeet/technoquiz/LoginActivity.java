@@ -28,13 +28,13 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText teamid;
-    private Button submit;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         teamid=findViewById(R.id.teamid);
-        submit=findViewById(R.id.sendteamid);
+       final Button submit = findViewById(R.id.sendteamid);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     private void senddetails() {
         final ProgressDialog progressDialog=ProgressDialog.show(LoginActivity.this,"Please wait","Loading");
         progressDialog.show();
-        StringRequest stringRequest=new StringRequest(Request.Method.POST, Config.LOGIN_URL, new Response.Listener<String>() {
+        final StringRequest stringRequest=new StringRequest(Request.Method.POST, Config.LOGIN_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 progressDialog.dismiss();
