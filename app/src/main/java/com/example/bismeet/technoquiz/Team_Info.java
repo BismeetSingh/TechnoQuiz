@@ -1,5 +1,6 @@
 package com.example.bismeet.technoquiz;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -74,9 +75,12 @@ public class Team_Info extends AppCompatActivity{
         final String name=team_name.getText().toString();
         final String college=college_name.getText().toString();
         final String house=house_vjti.getSelectedItem().toString();
+        final ProgressDialog progressDialog=ProgressDialog.show(Team_Info.this,"Loading","Please Wait");
+        progressDialog.show();
         final StringRequest teamdbreq=new StringRequest(Request.Method.POST, Config.TEAM_COLLEGE_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                progressDialog.dismiss();
                 if(response.equalsIgnoreCase("Insertion Failed"))
                 {
                     Toast.makeText(Team_Info.this, "Team Already Exists", Toast.LENGTH_SHORT).show();
@@ -108,6 +112,7 @@ public class Team_Info extends AppCompatActivity{
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
                 Toast.makeText(Team_Info.this,"Error",Toast.LENGTH_SHORT).show();
 
             }

@@ -1,5 +1,6 @@
 package com.example.bismeet.technoquiz;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -66,12 +67,16 @@ public class Registration_Two_member extends AppCompatActivity {
     }
 
     private void savetodb() {
+
         final String memname = name.getText().toString();
         final String mememail = email.getText().toString();
         final String memphone = phone.getText().toString();
+        final ProgressDialog progressDialog=ProgressDialog.show(Registration_Two_member.this,"Loading","Please Wait");
+        progressDialog.show();
        final StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.MEMBER_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                progressDialog.dismiss();
                 if(response.equalsIgnoreCase("success"))
                 {
                     Toast.makeText(getApplicationContext(),"You are successfully registered",Toast.LENGTH_LONG).show();
@@ -85,6 +90,7 @@ public class Registration_Two_member extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
                 Toast.makeText(Registration_Two_member.this,"Error",Toast.LENGTH_SHORT).show();
 
             }
