@@ -10,21 +10,21 @@
     <EditText
         android:inputType="text"
         android:layout_marginTop="10dp"
-        android:id="@+id/first_member_name"
-        android:hint="@string/first_member_name"
+        android:id="@+id/member_name"
+        android:hint="@string/member_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <EditText
         android:inputType="textEmailAddress"
         android:layout_marginTop="10dp"
-        android:id="@+id/Email_first"
+        android:id="@+id/Email_member"
         android:hint="@string/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <EditText
         android:inputType="phone"
         android:layout_marginTop="10dp"
-        android:id="@+id/phone_first"
+        android:id="@+id/phone_member"
         android:hint="@string/phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

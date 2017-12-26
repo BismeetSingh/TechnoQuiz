@@ -10,6 +10,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -27,18 +28,19 @@ import java.util.Map;
  * Created by bismeet on 19/12/17.
  */
 
-public class Registration_One_Member extends AppCompatActivity {
+public class Registration extends AppCompatActivity {
     private EditText name, email, phone;
     private int teamid;
     AwesomeValidation awesomeValidation;
+    private int count = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registration_member_one_main);
-        name = findViewById(R.id.first_member_name);
-        email = findViewById(R.id.Email_first);
-        phone = findViewById(R.id.phone_first);
+        name = findViewById(R.id.member_name);
+        email = findViewById(R.id.Email_member);
+        phone = findViewById(R.id.phone_member);
         teamid = getIntent().getIntExtra("id", 0);
         final Button next = findViewById(R.id.member_two_button);
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
@@ -56,9 +58,9 @@ public class Registration_One_Member extends AppCompatActivity {
     }
 
     private boolean validatefields() {
-        awesomeValidation.addValidation(Registration_One_Member.this, R.id.first_member_name, "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", R.string.nameerror);
-        awesomeValidation.addValidation(Registration_One_Member.this, R.id.Email_first, Patterns.EMAIL_ADDRESS, R.string.emailerror);
-        awesomeValidation.addValidation(Registration_One_Member.this, R.id.phone_first, "^[7-9][0-9]{9}$", R.string.phoneerror);
+        awesomeValidation.addValidation(Registration.this, R.id.member_name, "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", R.string.nameerror);
+        awesomeValidation.addValidation(Registration.this, R.id.Email_member, Patterns.EMAIL_ADDRESS, R.string.emailerror);
+        awesomeValidation.addValidation(Registration.this, R.id.phone_member, "^[7-9][0-9]{9}$", R.string.phoneerror);
         return awesomeValidation.validate();
 
 
@@ -68,7 +70,7 @@ public class Registration_One_Member extends AppCompatActivity {
         final String memname = name.getText().toString();
         final String mememail = email.getText().toString();
         final String memphone = phone.getText().toString();
-        final ProgressDialog progressDialog=ProgressDialog.show(Registration_One_Member.this,"Loading","Please Wait");
+        final ProgressDialog progressDialog = ProgressDialog.show(Registration.this, "Loading", "Please Wait");
         progressDialog.show();
         final StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.MEMBER_URL, new Response.Listener<String>() {
             @Override
@@ -76,7 +78,17 @@ public class Registration_One_Member extends AppCompatActivity {
                 progressDialog.dismiss();
                 Log.d("response", response);
                 if (response.equalsIgnoreCase("Success")) {
-                    startActivity(new Intent(Registration_One_Member.this, Registration_Two_member.class).putExtra("id", teamid));
+                    count++;
+                    name.setText("");
+                    email.setText("");
+                    phone.setText("");
+                    name.setHint("Second Member Name");
+
+                }
+                if(count==2)
+                {
+                    Toast.makeText(getApplicationContext(),"You are successfully registered",Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(Registration.this,ConfirmationButton.class));
                 }
 
             }
