@@ -10,34 +10,45 @@
 
     <EditText
         android:inputType="text"
+        android:background="@drawable/edittextbg"
+        android:drawableLeft="@drawable/team"
+        android:drawablePadding="20dp"
+        android:paddingBottom="12dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="14dp"
+        android:paddingTop="12dp"
         android:layout_marginTop="15dp"
         android:id="@+id/team_name"
         android:hint="@string/team_name"
         android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:paddingEnd="14dp"
+        android:drawableStart="@drawable/team"
+        android:paddingStart="8dp" />
     <EditText
         android:inputType="text"
         android:layout_marginTop="10dp"
         android:layout_below="@id/team_name"
+        android:background="@drawable/edittextbg"
+        android:drawableLeft="@drawable/college"
+        android:drawablePadding="20dp"
+        android:paddingBottom="12dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="14dp"
+        android:paddingTop="12dp"
         android:id="@+id/college_name"
         android:hint="@string/college_name"
         android:gravity="center"
         android:layout_centerVertical="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_below="@id/college_name"
-        android:id="@+id/house_spinner"
-        android:layout_marginTop="20dp"
-        android:textAlignment="center"
-        android:entries="@array/house"
-        android:layout_centerHorizontal="true"
-        android:layout_height="wrap_content"></Spinner>
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/college"
+        android:paddingStart="8dp" />
+
     <Button
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/house_spinner"
+        android:layout_below="@+id/college_name"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         style="?android:buttonBarButtonStyle"

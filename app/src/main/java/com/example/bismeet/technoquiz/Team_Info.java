@@ -29,7 +29,7 @@ import java.util.Map;
 
 public class Team_Info extends AppCompatActivity{
     private EditText team_name,college_name;
-    private Spinner house_vjti;
+
 
     @Override
     protected void onResume() {
@@ -46,7 +46,6 @@ public class Team_Info extends AppCompatActivity{
         setContentView(R.layout.team_main);
         team_name=findViewById(R.id.team_name);
         college_name=findViewById(R.id.college_name);
-        house_vjti= findViewById(R.id.house_spinner);
         final Button next_welcome = findViewById(R.id.next_button_to_member);
         next_welcome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,7 +72,6 @@ public class Team_Info extends AppCompatActivity{
 
         final String name=team_name.getText().toString();
         final String college=college_name.getText().toString();
-        final String house=house_vjti.getSelectedItem().toString();
         final ProgressDialog progressDialog=ProgressDialog.show(Team_Info.this,"Loading","Please Wait");
         progressDialog.show();
         final StringRequest teamdbreq=new StringRequest(Request.Method.POST, Config.TEAM_COLLEGE_URL, new Response.Listener<String>() {
@@ -121,7 +119,6 @@ public class Team_Info extends AppCompatActivity{
             protected Map<String, String> getParams() throws AuthFailureError {
                 final Map<String,String> team_map=new HashMap<>();
                 team_map.put(Config.KEY_COLLEGE,college);
-                team_map.put(Config.KEY_HOUSE,house);
                 team_map.put(Config.KEY_TEAM,name);
                 return team_map;
 
