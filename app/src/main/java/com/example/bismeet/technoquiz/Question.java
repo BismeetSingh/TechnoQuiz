@@ -42,7 +42,7 @@ import java.util.Random;
 
 public class Question extends AppCompatActivity {
     private ImageView quesimage;
-    private Date timeone,timetwo;
+    private Date timeone, timetwo;
     private TextView timer;
     private RadioGroup optionsgroup;
     private int quesid;
@@ -53,7 +53,7 @@ public class Question extends AppCompatActivity {
     private int count = 0;
     private int time;
     private int questioncount = 20;
-    private int optionidone,optionidtwo,optionidthree,optionidfour;
+    private int optionidone, optionidtwo, optionidthree, optionidfour;
     int arr[][] = {{0, 0, 2}, {0, 1, 3}, {0, 2, 3}, {1, 0, 2}, {1, 1, 3}, {1, 2, 3}, {2, 0, 1}, {2, 1, 1}, {2, 2, 2}};//, {2, 0, 1}, {2, 1, 1}, {2, 2, 2}, {3, 0, 1}, {3, 1, 1}, {3, 2, 1}
 
     @Override
@@ -95,13 +95,14 @@ public class Question extends AppCompatActivity {
         SimpleDateFormat df = new SimpleDateFormat("HH:mm");
         String formattedtime = df.format(c.getTime());
         try {
-             timeone=df.parse(formattedtime);
+            timeone = df.parse(formattedtime);
+            Log.d("time1",""+timeone.getTime());
         } catch (ParseException e) {
-            Log.d("error",e.getMessage());
+            Log.d("error", e.getMessage());
         }
-        Log.d("time",formattedtime);
-        String[] time=formattedtime.split(":");
-        Log.d("timetest",time[0]+" "+time[1]);
+        Log.d("time", formattedtime);
+        String[] time = formattedtime.split(":");
+        Log.d("timetest", time[0] + " " + time[1]);
 //        int hour=calendar1.get(Calendar.HOUR_OF_DAY);
 
 
@@ -194,7 +195,7 @@ public class Question extends AppCompatActivity {
                 map.put(Config.KEY_ID, String.valueOf(id));
                 map.put(Config.KEY_TYPE, sendtype);
                 map.put(Config.KEY_LEVEL, sendlvl);
-                Log.d("values",""+id+sendtype+sendlvl);
+                Log.d("values", "" + id + sendtype + sendlvl);
                 return map;
             }
         };
@@ -228,13 +229,11 @@ public class Question extends AppCompatActivity {
             time = quesobj.getInt("Time");
 //            Log.d("time", "" + time);
             questionTextView.setText(ques);
-            if(!purl.equalsIgnoreCase(""))
-            {
+            if (!purl.equalsIgnoreCase("")) {
                 quesimage.setVisibility(View.VISIBLE);
                 quesimage.setImageResource(getResources().getIdentifier("drawable/" + purl, null, getPackageName()));
 
-            }
-            else {
+            } else {
                 quesimage.setVisibility(View.GONE);
             }
             getOptions();
@@ -294,10 +293,10 @@ public class Question extends AppCompatActivity {
         two.setText(option2.getString("question"));
         three.setText(option3.getString("question"));
         four.setText(option4.getString("question"));
-        optionidone=option1.getInt("optionid");
-        optionidtwo=option2.getInt("optionid");
-        optionidthree=option3.getInt("optionid");
-        optionidfour=option4.getInt("optionid");
+        optionidone = option1.getInt("optionid");
+        optionidtwo = option2.getInt("optionid");
+        optionidthree = option3.getInt("optionid");
+        optionidfour = option4.getInt("optionid");
         count++;
         Log.d("fetch", "" + time);
         reverseTimer(time, timer);
@@ -316,19 +315,16 @@ public class Question extends AppCompatActivity {
             SimpleDateFormat df = new SimpleDateFormat("HH:mm");
             String formattedtime = df.format(c.getTime());
             try {
-                timetwo=df.parse(formattedtime);
+                timetwo = df.parse(formattedtime);
             } catch (ParseException e) {
-                Log.d("error",e.getMessage());
+                Log.d("error", e.getMessage());
             }
-            Log.d("time",formattedtime);
-            String[] time=formattedtime.split(":");
-            long mills = timeone.getTime() - timetwo.getTime();
-            long hours = mills/(1000 * 60 * 60);
-            long mins = mills % (1000*60*60);
-
-            String diff = hours + ":" + mins;
-            Log.d("diff",""+diff);
-            startActivity(new Intent(Question.this, ScoreActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            Log.d("times", "" + timetwo.getTime());
+//            String[] time = formattedtime.split(":");
+//            Log.d("timetest", time[0] + " " + time[1]);
+            long mills = Math.abs(timeone.getTime() - timetwo.getTime());
+            senddiff(mills);
+//           Log.d("millis",String.valueOf(mills));
             return;
 
         }
@@ -338,7 +334,7 @@ public class Question extends AppCompatActivity {
         final int qlevel = rand.nextInt(3);
 //        int qlevel = 0;
 //        int qtype = 0;
-        final String[] type = {"LQ","CS","IB"};
+        final String[] type = {"LQ", "CS", "IB"};
         final String[] level = {"Easy", "Medium", "Hard"};
         String sendtype;
         String sendlvl;
@@ -526,6 +522,42 @@ public class Question extends AppCompatActivity {
         }
 
 
+    }
+
+    private void senddiff(final long mills) {
+        final ProgressDialog progressDialog=ProgressDialog.show(Question.this,"Please wait","Loading");
+        progressDialog.show();
+        StringRequest stringRequest=new StringRequest(Request.Method.POST, Config.TIME_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("responsetime",""+response);
+                progressDialog.dismiss();
+                if(response.equalsIgnoreCase("Successful"))
+                {
+                    startActivity(new Intent(Question.this, ScoreActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
+
+            }
+        })
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map=new HashMap<>();
+                map.put("time",String.valueOf(mills));
+                map.put(Config.KEY_ID,String.valueOf(getSharedPreferences(Config.Shared_ID_PREF,MODE_PRIVATE).getInt(Config.KEY_ID,0)));
+                return map;
+
+            }
+        };
+        Volley.newRequestQueue(getApplicationContext()).add(stringRequest);
     }
 
     @Override
